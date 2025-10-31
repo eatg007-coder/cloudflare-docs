@@ -6,14 +6,63 @@ sidebar:
   label: About
 ---
 
-import { FeatureTable, Render } from "~/components";
+import { FeatureTable } from "~/components";
 
-<Render file="full-setup-definition" product="dns" />
+# Full setup
 
-## How to
+A **Full setup** is the complete DNS delegation where a domain or delegated subdomain is fully managed through Cloudflare DNS — the parent must publish delegation to the Cloudflare nameservers Cloudflare assigned for the zone. If the parent does not publish that delegation, Cloudflare cannot validate the zone and the dashboard will display statuses such as **Invalid nameservers** or **Pending activation**.
 
-For more details, refer to [Set up a full domain](/dns/zone-setups/full-setup/setup/).
+This single file contains the definition, the practical how-to, verification commands, and ready-to-paste support messages you can use immediately. Paste this file once at:
 
-## Availability
 
-<FeatureTable id="dns.full_setup" />
+and it will be a complete, standalone doc for engineers and support staff.
+
+---
+
+## Definition
+
+A **Full setup** means:
+
+- The zone exists in Cloudflare (visible in the dashboard or created via API).
+- The parent DNS (registrar or parent zone) delegates the domain or subdomain to Cloudflare by publishing the exact Cloudflare nameservers assigned to that zone.
+- DNSSEC/DS is either disabled or correctly synchronized (mismatched DS records break delegation).
+- Necessary records (A, AAAA, CNAME, MX, TXT, etc.) are present inside Cloudflare so the service begins working immediately once delegation is in place.
+
+**Important:** Delegation is a two-sided operation — Cloudflare provides authoritative nameservers; the parent must publish the NS delegation for the zone or subdomain.
+
+---
+
+## Quick checklist (TL;DR)
+
+1. Create the zone in Cloudflare (dashboard or API) and copy the **two** nameservers Cloudflare assigns.  
+2. At the parent:
+   - For a registered domain: set the domain's authoritative nameservers to the two Cloudflare nameservers.
+   - For a delegated subdomain: add **NS** records in the parent zone pointing the subdomain to the two Cloudflare nameservers.
+3. Remove conflicting records at the parent for the same label (A/CNAME).
+4. Disable or synchronize DNSSEC/DS records.
+5. Verify with `dig NS <zone> +short` and `dig +trace <zone>`.
+6. When delegation is visible globally, Cloudflare will validate and mark the zone active.
+7. Configure required DNS records inside Cloudflare and set SSL/TLS mode appropriately.
+
+---
+
+## How to — step-by-step (practical, copy/paste, no fluff)
+
+### Prerequisites
+- Cloudflare account access for the zone (e.g., `eatg007@gmail.com`).
+- Access to the registrar or the DNS host that controls the parent zone (e.g., the registrar for `example.com`, or the DNS host for `uk.com` if delegating `s.uk.com`).
+- Knowledge whether you are delegating a root domain or a subdomain.
+
+### Step 1 — Add the zone to Cloudflare
+Dashboard:
+
+1. **Add site** → enter the domain (or subdomain if you are creating a separate zone for a subdomain).
+2. Continue and copy the **two** nameservers Cloudflare shows (exact hostnames).
+
+API alternative (create zone):
+```bash
+curl -s -X POST "https://api.cloudflare.com/client/v4/zones" \
+  -H "X-Auth-Email: you@example.com" \
+  -H "X-Auth-Key: <API_KEY>" \
+  -H "Content-Type: application/json" \
+  --data '{"name":"example.com","jump_start":true}'
