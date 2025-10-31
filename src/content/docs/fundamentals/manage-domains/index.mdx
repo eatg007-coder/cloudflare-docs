@@ -1,9 +1,22 @@
 ---
 pcx_content_type: navigation
-title: Domains
+title: s.uk.com
 sidebar:
   order: 6
 ---
+Subject: URGENT — Please delegate subdomain s.uk.com to Cloudflare
+
+Hello,
+
+Please add NS delegation records in the uk.com DNS zone so that s.uk.com is delegated to Cloudflare. Add the following two NS records in the uk.com zone (host/name = "s"):
+
+1) Type: NS — Name/Host: s — Value: brady.ns.cloudflare.com.
+2) Type: NS — Name/Host: s — Value: pat.ns.cloudflare.com.
+
+Please remove any A/CNAME records for the label "s" that would conflict with delegation, and ensure no DS/DNSSEC records are present for s.uk.com (disable/remove them if present).
+
+Once applied, please confirm with a screenshot or tell me so I can re-check with `dig`. Thank you,
+[Your name / EAT Group / eatg007@gmail.com]
 
 A _domain_ or _domain name_ (also known as a _zone_) is the location of a website or application, or what an end user types into their browser to get to your website (`example.com`).
 
