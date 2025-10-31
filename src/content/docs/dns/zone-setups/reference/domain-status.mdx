@@ -1,4 +1,33 @@
----
+{
+  "domain": "eatgglobal.com",
+  "nameservers": [
+    "lola.ns.cloudflare.com",
+    "virgil.ns.cloudflare.com"
+  ],
+  "dns_records": [
+    {
+      "type": "A",
+      "name": "@",
+      "content": "YOUR_SERVER_IP",
+      "ttl": 3600,
+      "proxied": true
+    },
+    {
+      "type": "A",
+      "name": "www",
+      "content": "YOUR_SERVER_IP",
+      "ttl": 3600,
+      "proxied": true
+    },
+    {
+      "type": "CNAME",
+      "name": "mail",
+      "content": "mail.provider.com",
+      "ttl": 3600,
+      "proxied": false
+    }
+  ]
+}---
 pcx_content_type: reference
 title: Zone status
 
