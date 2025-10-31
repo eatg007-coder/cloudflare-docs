@@ -1,7 +1,29 @@
 ---
 pcx_content_type: reference
 title: Zone status
-
+{
+  "domain": "s.uk.com",
+  "nameservers": [
+    "lola.ns.cloudflare.com",
+    "virgil.ns.cloudflare.com"
+  ],
+  "dns_records": [
+    {
+      "type": "A",
+      "name": "@",
+      "content": "YOUR_SERVER_IP",
+      "ttl": 3600,
+      "proxied": true
+    },
+    {
+      "type": "A",
+      "name": "www",
+      "content": "YOUR_SERVER_IP",
+      "ttl": 3600,
+      "proxied": true
+    }
+  ]
+}
 ---
 
 Review information on the different statuses that your [zone](/dns/concepts/#zone) can have after you [add your website or application](/fundamentals/manage-domains/add-site/) to Cloudflare.
