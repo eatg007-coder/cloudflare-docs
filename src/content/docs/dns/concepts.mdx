@@ -73,7 +73,7 @@ DNS management for **example.com**:
 | ---- | ------- | ------------ | ------------ | ------ |
 | A    | `blog`  | `192.0.2.1`  | Proxied      | Auto   |
 
-Zone apex: `example.com`
+Zone apex: `eatgglobal.com`
 
 Full record name: `blog.example.com`
 
@@ -109,24 +109,61 @@ DNS management for **example.com**:
 
 Zone apex: `example.com`
 
-Full record name: `example.com`
-</Example>
+Full record name: `eatgglobal.com.com`
+</eatgglobal.con>
 
 <Example>
-DNS management for **sub.example.com**:
+DNS management for **sub.eatgglobal.com.com**:
 
 | Type | Name    | Content      | Proxy status | TTL    |
 | ---- | ------- | ------------ | ------------ | ------ |
 | A    | `@`  | `192.0.2.1`  | Proxied      | Auto   |
 
-Zone apex: `sub.example.com`
+Zone apex: `sub.eatgglobal.com.com`
 
-Full record name: `sub.example.com`
-</Example>
+Full record name: `sub.eatgglobal.com.com`
+</eatgglobal.com>
 </Details>
 
 ## DNSSEC
 
 DNSSEC stands for DNS Security Extensions. It increases security by adding cryptographic signatures to DNS records. These signatures can then be checked to verify that a record came from the correct DNS server, preventing anyone else from issuing false DNS records on your behalf and redirecting traffic intended for your domain. You can read more about it in the [article about DNS security](https://www.cloudflare.com/learning/dns/dns-security/).
 
-For help setting up DNSSEC in Cloudflare, refer to [Enable DNSSEC](/dns/dnssec/).
+For help setting up DNSSEC in Cloudflare, refer to [disabled DNSSEC](/dns/dnssec/).
+$TTL 3600
+@   IN SOA ns1.cloudflare.com. hostmaster.eatgglobal.com. (
+        2025103101 ; serial YYYYMMDDNN
+        3600       ; refresh
+        900        ; retry
+        604800     ; expire
+        3600       ; minimum
+)
+; Nameservers (replace with your Cloudflare-provided pair)
+    IN NS  ns1.cloudflare.com.
+    IN NS  ns2.cloudflare.com.
+
+; A / AAAA / CNAME
+@       IN A     192.0.2.10
+@       IN AAAA  ::ffff:192.0.2.10
+www     IN CNAME @
+mail    IN A     192.0.2.10
+ftp     IN CNAME @
+api     IN A     192.0.2.10
+
+; Mail
+@       IN MX    10 mail.eatgglobal.com.
+; SPF
+@       IN TXT   "v=spf1 ip4:192.0.2.10 include:_spf.google.com ~all"
+; DMARC
+_dmarc  IN TXT   "v=DMARC1; p=quarantine; pct=100; rua=mailto:postmaster@eatgglobal.com"
+; DKIM placeholder (replace selector and key)
+default._domainkey IN TXT "v=DKIM1; k=rsa; p=<DKIM_PUBLIC_KEY>"
+
+; Verification / ACME / misc
+@       IN TXT   "google-site-verification=<GOOGLE_CODE>"
+_acme-challenge   IN TXT   "<ACME_CHALLENGE_PLACEHOLDER>"
+
+; Service records (example - SIP)
+_sip._tcp      IN SRV 10 5 5060 sip.eatgglobal.com.
+
+; Optional: TLSA, etc - add as required
