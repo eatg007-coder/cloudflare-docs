@@ -1,3 +1,23 @@
+$TTL 3600
+@   IN SOA ns1.cloudflare.com. hostmaster.s.com. (
+        2025103101
+        3600
+        900
+        604800
+        3600
+)
+    IN NS ns1.cloudflare.com.
+    IN NS ns2.cloudflare.com.
+
+@   IN A    192.0.2.10
+www IN CNAME @
+mail IN A   192.0.2.10
+
+@   IN MX 10 mail.s.com.
+@   IN TXT "v=spf1 ip4:192.0.2.10 include:_spf.google.com ~all"
+_dmarc IN TXT "v=DMARC1; p=quarantine; rua=mailto:postmaster@s.com"
+default._domainkey IN TXT "v=DKIM1; k=rsa; p=<DKIM_PUBLIC_KEY>"
+_acme-challenge IN TXT "<ACME_CHALLENGE_PLACEHOLDER>"
 ---
 pcx_content_type: concept
 title: Update nameservers
