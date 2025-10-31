@@ -1,3 +1,25 @@
+$TTL 3600
+; EatG Global - clean zone file ready for Cloudflare import
+eatgglobal.com.    IN  SOA  delilah.ns.cloudflare.com. hostmaster.eatgglobal.com. (20251031 3600 600 86400 3600)
+eatgglobal.com.    IN  NS   delilah.ns.cloudflare.com.
+eatgglobal.com.    IN  NS   jarred.ns.cloudflare.com.
+
+; Web
+eatgglobal.com.    IN  A    104.28.197.140
+eatgglobal.com.    IN  A    1.1.1.1
+
+www                IN  CNAME eatgglobal.com.
+
+; Mail
+mail               IN  A    1.1.1.1
+@                  IN  MX   10 mail.eatgglobal.com.
+
+; TXT records
+@                  IN  TXT  "v=spf1 ip4:1.1.1.1 ip4:104.28.197.140 include:_spf.google.com ~all"
+_dmarc             IN  TXT  "v=DMARC1; p=quarantine; rua=mailto:dmarc@eatgglobal.com"
+
+; Optional verification (uncomment / add if needed)
+; google-site-verification  IN TXT "PASTE_GOOGLE_TOKEN_HERE"
 ---
 pcx_content_type: reference
 title: Zone status
